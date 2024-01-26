@@ -7,7 +7,7 @@ sealed class MainEvents {
     data class UpdateUser(val user: UserModel) : MainEvents()
     data class DeleteUser(val user: UserModel) : MainEvents()
 
-    data object GetUsers : MainEvents()
+//    data object GetUsers : MainEvents()
     data object GetUserCount : MainEvents()
 
     data object ResetMessage : MainEvents()

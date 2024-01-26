@@ -2,14 +2,9 @@ package com.example.homework_20.presentation.screen.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.homework_20.domain.usecase.user.AddUserUseCase
-import com.example.homework_20.domain.usecase.user.DeleteUserUseCase
-import com.example.homework_20.domain.usecase.user.GetUserByEmailUseCase
-import com.example.homework_20.domain.usecase.user.GetUserCountUseCase
-import com.example.homework_20.domain.usecase.user.GetUsersUseCase
-import com.example.homework_20.domain.usecase.user.UpdateUserUseCase
 import com.example.homework_20.domain.usecase.validator.EmailValidatorUseCase
 import com.example.homework_20.domain.usecase.validator.FieldsValidatorUseCase
+import com.example.homework_20.domain.usecase.wrapper.UserUseCase
 import com.example.homework_20.presentation.event.main.MainEvents
 import com.example.homework_20.presentation.mapper.user.toDomain
 import com.example.homework_20.presentation.model.user.UserModel
@@ -23,12 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val addUserUseCase: AddUserUseCase,
-    private val getUsersUseCase: GetUsersUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase,
-    private val updateUserUseCase: UpdateUserUseCase,
-    private val getUserByEmailUseCase: GetUserByEmailUseCase,
-    private val getUserCountUseCase: GetUserCountUseCase,
+    private val userUseCase: UserUseCase,
     private val emailValidatorUseCase: EmailValidatorUseCase,
     private val fieldsValidatorUseCase: FieldsValidatorUseCase,
 ) : ViewModel() {
@@ -41,24 +31,17 @@ class MainViewModel @Inject constructor(
             is MainEvents.AddUser -> onAddUser(event.user)
             is MainEvents.DeleteUser -> onDeleteUser(event.user)
             is MainEvents.UpdateUser -> onUpdateUser(event.user)
-            is MainEvents.GetUsers -> onGetUsers()
             is MainEvents.GetUserCount -> onGetUserCount()
             is MainEvents.ResetMessage -> onResetMessage()
         }
     }
 
-    private fun onGetUsers() {
+    private fun onGetUserCount() {
         viewModelScope.launch {
-            val userCount = getUserCountUseCase.invoke()
+            val userCount = userUseCase.getUserCountUseCase.invoke()
             _userState.update { currentState ->
                 currentState.copy(userCount = userCount)
             }
-        }
-    }
-
-    private fun onGetUserCount() {
-        viewModelScope.launch {
-            getUserCountUseCase.invoke()
         }
     }
 
@@ -66,11 +49,11 @@ class MainViewModel @Inject constructor(
     private fun onAddUser(user: UserModel) {
         viewModelScope.launch {
             if (validationChecker(user.email, user.firstName, user.lastName, user.age)) {
-                val existingUser = getUserByEmailUseCase.invoke(user.email)
+                val existingUser = userUseCase.getUserByEmailUseCase.invoke(user.email)
                 if (existingUser != null) {
                     updateErrorMessage(message = "User already exists")
                 } else {
-                    addUserUseCase.invoke(user.toDomain())
+                    userUseCase.addUserUseCase.invoke(user.toDomain())
                     updateStatusMessage(message = "User added successfully")
                 }
             }
@@ -79,11 +62,11 @@ class MainViewModel @Inject constructor(
 
     private fun onDeleteUser(user: UserModel) {
         viewModelScope.launch {
-            val existingUser = getUserByEmailUseCase.invoke(user.email)
+            val existingUser = userUseCase.getUserByEmailUseCase.invoke(user.email)
             if (existingUser == null) {
                 updateErrorMessage(message = "User does not exist")
             } else {
-                deleteUserUseCase.invoke(user.toDomain())
+                userUseCase.deleteUserUseCase.invoke(user.toDomain())
                 updateStatusMessage(message = "User deleted successfully")
             }
         }
@@ -92,11 +75,11 @@ class MainViewModel @Inject constructor(
 
     private fun onUpdateUser(user: UserModel) {
         viewModelScope.launch {
-            val existingUser = getUserByEmailUseCase.invoke(user.email)
+            val existingUser = userUseCase.getUserByEmailUseCase.invoke(user.email)
             if (existingUser == null) {
                 updateErrorMessage(message = "User not found")
             } else {
-                updateUserUseCase.invoke(user.toDomain())
+                userUseCase.updateUserUseCase.invoke(user.toDomain())
                 updateStatusMessage(message = "User updated successfully")
             }
         }

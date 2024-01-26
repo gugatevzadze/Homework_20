@@ -5,19 +5,12 @@ import com.example.homework_20.data.local.mapper.user.toData
 import com.example.homework_20.data.local.mapper.user.toDomain
 import com.example.homework_20.domain.model.user.User
 import com.example.homework_20.domain.repository.user.UserRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor (
     private val userDao: UserDao
 )
 : UserRepository {
-    override suspend fun getUsers(): Flow<List<User>> {
-        return userDao.getAllUsers().map { user ->
-            user.map { it.toDomain() }
-        }
-    }
 
     override suspend fun getUserCount(): Int {
         return userDao.getUserCount()

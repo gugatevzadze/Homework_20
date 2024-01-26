@@ -12,7 +12,6 @@ import com.example.homework_20.presentation.model.user.UserModel
 import com.example.homework_20.presentation.state.main.MainState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
@@ -44,7 +43,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun handleState(state: MainState) {
-        viewModel.onEvent(MainEvents.GetUsers)
+        viewModel.onEvent(MainEvents.GetUserCount)
         binding.tvActiveUsers.text = state.userCount?.toString()
         state.errorMessage?.let {
             binding.tvError.text = it

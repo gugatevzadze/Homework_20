@@ -1,11 +1,9 @@
 package com.example.homework_20.domain.repository.user
 
 import com.example.homework_20.domain.model.user.User
-import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    suspend fun getUsers(): Flow<List<User>>
     suspend fun getUserCount(): Int
 
     suspend fun addUser(user: User)
