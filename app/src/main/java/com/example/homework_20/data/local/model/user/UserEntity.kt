@@ -7,13 +7,11 @@ import androidx.room.PrimaryKey
 @Entity
 data class UserEntity(
     @PrimaryKey
-    val id: String,
+    val email:String,
     @ColumnInfo(name="first_name")
     val firstName:String,
     @ColumnInfo(name="last_name")
     val lastName:String,
-    @ColumnInfo(name="email")
-    val email:String,
     @ColumnInfo(name="age")
     val age:String,
 )

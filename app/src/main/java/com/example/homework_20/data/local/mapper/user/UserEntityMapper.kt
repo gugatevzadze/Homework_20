@@ -5,20 +5,18 @@ import com.example.homework_20.domain.model.user.User
 
 fun UserEntity.toDomain(): User {
     return User(
-        id = id,
+        email = email,
         firstName = firstName,
         lastName = lastName,
-        email = email,
         age = age
     )
 }
 
 fun User.toData(): UserEntity {
     return UserEntity(
-        id = id,
+        email = email,
         firstName = firstName,
         lastName = lastName,
-        email = email,
         age = age
     )
 }

@@ -19,6 +19,11 @@ class UserRepositoryImpl @Inject constructor (
         }
     }
 
+    override suspend fun getUserCount(): Int {
+        return userDao.getUserCount()
+    }
+
+
     override suspend fun addUser(user: User) {
         return userDao.addUser(user.toData())
     }

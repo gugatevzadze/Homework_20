@@ -5,20 +5,18 @@ import com.example.homework_20.presentation.model.user.UserModel
 
 fun User.toPresentation(): UserModel {
     return UserModel(
-        id = id,
+        email = email,
         firstName = firstName,
         lastName = lastName,
-        email = email,
         age = age,
     )
 }
 
 fun UserModel.toDomain(): User {
     return User(
-        id = id,
+        email = email,
         firstName = firstName,
         lastName = lastName,
-        email = email,
         age = age,
     )
 }

@@ -31,53 +31,53 @@ object UseCaseModule {
         return FieldsValidatorUseCase()
     }
 
-    @Provides
-    @Singleton
-    fun provideAddUserUseCase(
-        userRepository: UserRepository
-    ): AddUserUseCase {
-        return AddUserUseCase(
-            userRepository = userRepository
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideDeleteUserUseCase(
-        userRepository: UserRepository
-    ): DeleteUserUseCase {
-        return DeleteUserUseCase(
-            userRepository = userRepository
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetUserByEmailUseCase(
-        userRepository: UserRepository
-    ): GetUserByEmailUseCase {
-        return GetUserByEmailUseCase(
-            userRepository = userRepository
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetUsersUseCase(
-        userRepository: UserRepository
-    ): GetUsersUseCase {
-        return GetUsersUseCase(
-            userRepository = userRepository
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideUpdateUserUseCase(
-        userRepository: UserRepository
-    ): UpdateUserUseCase {
-        return UpdateUserUseCase(
-            userRepository = userRepository
-        )
-    }
+//    @Provides
+//    @Singleton
+//    fun provideAddUserUseCase(
+//        userRepository: UserRepository
+//    ): AddUserUseCase {
+//        return AddUserUseCase(
+//            userRepository = userRepository
+//        )
+//    }
+//
+//    @Provides
+//    @Singleton
+//    fun provideDeleteUserUseCase(
+//        userRepository: UserRepository
+//    ): DeleteUserUseCase {
+//        return DeleteUserUseCase(
+//            userRepository = userRepository
+//        )
+//    }
+//
+//    @Provides
+//    @Singleton
+//    fun provideGetUserByEmailUseCase(
+//        userRepository: UserRepository
+//    ): GetUserByEmailUseCase {
+//        return GetUserByEmailUseCase(
+//            userRepository = userRepository
+//        )
+//    }
+//
+//    @Provides
+//    @Singleton
+//    fun provideGetUsersUseCase(
+//        userRepository: UserRepository
+//    ): GetUsersUseCase {
+//        return GetUsersUseCase(
+//            userRepository = userRepository
+//        )
+//    }
+//
+//    @Provides
+//    @Singleton
+//    fun provideUpdateUserUseCase(
+//        userRepository: UserRepository
+//    ): UpdateUserUseCase {
+//        return UpdateUserUseCase(
+//            userRepository = userRepository
+//        )
+//    }
 }

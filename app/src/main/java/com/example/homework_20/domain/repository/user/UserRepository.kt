@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
 
     suspend fun getUsers(): Flow<List<User>>
+    suspend fun getUserCount(): Int
 
     suspend fun addUser(user: User)
 

@@ -17,9 +17,10 @@ import java.util.UUID
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
 
-    private val viewModel:MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun setUp() {
+        onCountViewSetText()
     }
 
     override fun viewActionListeners() {
@@ -29,24 +30,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     override fun bindObservers() {
-        observeUsersCount()
         observeMessage()
-    }
-
-    private fun observeUsersCount() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.userState.collect{ state ->
-                    handleState(state)
-                }
-            }
-        }
     }
 
     private fun observeMessage() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.userState.collect{ state ->
+                viewModel.userState.collect { state ->
                     handleState(state)
                 }
             }
@@ -55,29 +45,28 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     private fun handleState(state: MainState) {
         viewModel.onEvent(MainEvents.GetUsers)
-        binding.tvActiveUsers.text = state.users?.size.toString()
-        if (state.errorMessage != null) {
-            binding.tvError.text = state.errorMessage
+        binding.tvActiveUsers.text = state.userCount?.toString()
+        state.errorMessage?.let {
+            binding.tvError.text = it
             binding.tvError.visibility = View.VISIBLE
             binding.tvSuccess.visibility = View.GONE
-        } else if (state.statusMessage != null) {
-            binding.tvSuccess.text = state.statusMessage
+            viewModel.onEvent(MainEvents.ResetMessage)
+        }
+        state.statusMessage?.let {
+            binding.tvSuccess.text = it
             binding.tvSuccess.visibility = View.VISIBLE
             binding.tvError.visibility = View.GONE
-        } else {
-            binding.tvSuccess.visibility = View.GONE
-            binding.tvError.visibility = View.GONE
+            viewModel.onEvent(MainEvents.ResetMessage)
         }
     }
 
     private fun getUserDetails(): UserModel {
+        val email = binding.etEmail.text.toString()
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
-        val email = binding.etEmail.text.toString()
         val age = binding.etAge.text.toString()
-        val id = UUID.randomUUID().toString()
 
-        return UserModel(id, firstName, lastName, email, age)
+        return UserModel(email, firstName, lastName, age)
     }
 
     private fun addUser() {
@@ -93,6 +82,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private fun updateUser() {
         val user = getUserDetails()
         viewModel.onEvent(MainEvents.UpdateUser(user))
+    }
+
+    private fun countUser() {
+        viewModel.onEvent(MainEvents.GetUserCount)
     }
 
     private fun onAddButtonClickListener() {
@@ -111,5 +104,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         binding.btnUpdate.setOnClickListener {
             updateUser()
         }
+    }
+
+    private fun onCountViewSetText(){
+        binding.tvActiveUsers.text = countUser().toString()
     }
 }
